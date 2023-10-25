@@ -3,8 +3,16 @@ import { baseUrl } from 'config'
 const MODE = import.meta.env.MODE // 环境变量
 
 export const get = axios.get
-
 export const post = axios.post
+
+axios.interceptors.request.use((config) => {
+  // 在发送请求之前做些什么
+  console.log('Request URL:', config.url);
+  return config;
+}, (error) => {
+  // 对请求错误做些什么
+  return Promise.reject(error);
+});
 
 export const typeMap = {
   1: {
