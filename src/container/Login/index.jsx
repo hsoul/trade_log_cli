@@ -31,6 +31,7 @@ const Login = () => {
     }
     try {
       if (type == 'login') {
+        console.log('login', username, password)
         const { data } = await post('/api/user/login', {
           username,
           password
@@ -51,7 +52,7 @@ const Login = () => {
           password
         });
         Toast.show('注册成功');
-         setType('login');
+        setType('login');
       }
     } catch (err) {
       Toast.show(err.msg);

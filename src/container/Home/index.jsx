@@ -24,11 +24,11 @@ const Home = () => {
     const [totalLoss, setTotalLoss] = useState(0); // 亏损
     const [totalIncome, setTotalIncome] = useState(0); // 盈利
     const [totalWin, setTotalWin] = useState(0); // 汇总
-    const [currentDir, setcurrentDir] = useState({}); // 当前筛选方向类型
+    const [currentDir, setcurrentDir] = useState({id: 'all', name: '总'}); // 当前筛选方向类型
     const [currentSelect, setCurrentSelect] = useState({}); // 当前筛选类型
     const [dateType, setDateType] = useState({id:"year", name: "年"}); // 当前筛选类型 period
     const [datePickMode, setDatePickMode] = useState("year");
-    const [currentTime, setCurrentTime] = useState("时间"); // 当前筛选时间
+    const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY')); // 当前筛选时间
     const [endDate, setEndDate] = useState(dayjs().format('YYYY-MM-DD')); // 当前筛选时间
     const [page, setPage] = useState(1); // 分页
     const [list, setList] = useState([]); // 账单列表
@@ -38,11 +38,13 @@ const Home = () => {
   
     useEffect(() => {
       getBillList() // 初始化
-    }, [page, currentSelect, currentTime])
+    }, [page, currentSelect, currentTime, endDate, currentDir])
   
     const getBillList = async () => {
       console.log("getBillList")
-      const { data } = await get(`/api/tradelog/list?filter_date=2023&time_filter_type=year&dir_filter_type=${'all'}&page=1`);
+      const { data } = await get(`/api/tradelog/list?trade_type=${currentSelect.id}&filter_date=${currentTime}&end_date=${endDate}&time_filter_type=${dateType.id}&dir_filter_type=${currentDir.id}&page=1`);
+      // const { data } = await get(`/api/tradelog/list?filter_date=${currentTime}&end_date='2023-10-24'&time_filter_type='year'&dir_filter_type='all'&page=1`);
+      // const { data } = await get(`/api/tradelog/list?filter_date=2023&time_filter_type=year&dir_filter_type=${'all'}&page=1`);
       console.log("getBillList", data)
       const sorted_list = data.list.sort((a, b) => {
         return new Date(b.date) - new Date(a.date)
@@ -90,7 +92,7 @@ const Home = () => {
     }
 
     // 添加方向弹窗
-    const toggleDir = () => {
+    const dirToggle = () => {
       dirRef.current && dirRef.current.show()
     };
 
@@ -117,21 +119,21 @@ const Home = () => {
       addRef.current && addRef.current.show()
     }
 
-    // 筛选类型
+    // 筛选方向类型
     const selectDir = (item) => {
       setRefreshing(REFRESH_STATE.loading);
       setPage(1);
       setcurrentDir(item)
     }
   
-    // 筛选类型
+    // 筛选做单类型
     const select = (item) => {
       setRefreshing(REFRESH_STATE.loading);
       setPage(1);
       setCurrentSelect(item)
     }
 
-    // 筛选类型
+    // 筛选日期类型
     const selectDateType = (item) => {
       // setRefreshing(REFRESH_STATE.loading);
       setPage(1);
@@ -152,7 +154,7 @@ const Home = () => {
       setCurrentTime(item)
     }
 
-    // 筛选月份
+    // 筛选结束时间
     const selectEndDate = (item) => {
       setRefreshing(REFRESH_STATE.loading);
       setPage(1);
@@ -167,7 +169,7 @@ const Home = () => {
           <span className={s.expense}>亏:<b style={{ color: '#661313' }}>$ {totalLoss}</b></span>
         </div>
         <div className={s.typeWrap}>
-          <div className={s.left} onClick={toggleDir}>
+          <div className={s.left} onClick={dirToggle}>
             <span className={s.title}>{ currentDir.name || '方向' } <Icon className={s.arrow} type="arrow-bottom" /></span>
           </div>
           <div className={s.left} onClick={toggle}>

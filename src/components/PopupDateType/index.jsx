@@ -10,6 +10,10 @@ const PopupDateType = forwardRef(({ onSelect }, ref) => {
   const [show, setShow] = useState(false);
   const [active, setActive] = useState('all');
   const [dateType, setDateType] = useState([
+    // {
+    //   name: '所有',
+    //   id: 'all'
+    // },
     {
       name: '年',
       id: 'year'
