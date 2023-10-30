@@ -13,8 +13,6 @@ const BillItem = ({ bill }) => {
   const [loss_num, setLoss] = useState(0) // 失败
   const [total_win_num, setTotalWin] = useState(0) // 总胜利
 
-  // const [income, setIncome] = useState(0);
-  // const [expense, setExpense] = useState(0);
   const navigateTo = useNavigate()
 
   // 当添加账单是，bill.bills 长度变化，触发当日收支总和计算。
@@ -33,7 +31,9 @@ const BillItem = ({ bill }) => {
   }, [bill.bills]);
 
   const goToDetail = (item) => {
-    navigateTo(`/trade/detail?id=${item.id}`)
+    console.log("goToDetail", item)
+    // navigateTo(`/trade/detail?id=${item.id}`)
+    navigateTo(`/detail?id=${item.id}`)
   };
 
   return <div className={s.item}>
@@ -65,14 +65,12 @@ const BillItem = ({ bill }) => {
               className={s.itemIcon}
               type={item.id}
             />
-            <span>{ item.dir }</span>
+            <span className='s.title'>{ item.trade_type } {' '} </span>
+            <span className='s.itemTitle'> { item.dir }</span>
           </>
         }
         description={<span style={{ color: item.dir == '多' ? 'purple' : 'Blue' }}>{`${item.income < 0 ? '' : '+'}${item.income}`}</span>}
-        help={<div>{dayjs(Number(item.start_time * 1000)).format('HH:mm')} {item.dir ? `| ${item.dir}` : ''} {item.start_time ? `| ${item.start_time}` : ''}</div>}
-
-        // description={<span style={{ color: item.pay_type == 2 ? 'red' : '#39be77' }}>{`${item.pay_type == 1 ? '-' : '+'}${item.amount}`}</span>}
-        // help={<div>{dayjs(Number(item.date)).format('HH:mm')} {item.remark ? `| ${item.remark}` : ''}</div>}
+        help={<div>{dayjs(Number(item.start_time * 1000)).format('HH:mm')} {item.end_time ? "-" + dayjs(Number(item.end_time * 1000)).format('HH:mm') : '    '} {item.dir ? `| ${item.dir}` : ''} </div>}
       >
       </Cell>)
     }

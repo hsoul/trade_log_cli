@@ -25,7 +25,7 @@ const Home = () => {
     const [totalIncome, setTotalIncome] = useState(0); // 盈利
     const [totalWin, setTotalWin] = useState(0); // 汇总
     const [currentDir, setcurrentDir] = useState({id: 'all', name: '总'}); // 当前筛选方向类型
-    const [currentSelect, setCurrentSelect] = useState({}); // 当前筛选类型
+    const [currentSelect, setCurrentSelect] = useState({id:'all', name:"所有"}); // 当前筛选类型
     const [dateType, setDateType] = useState({id:"year", name: "年"}); // 当前筛选类型 period
     const [datePickMode, setDatePickMode] = useState("year");
     const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY')); // 当前筛选时间
