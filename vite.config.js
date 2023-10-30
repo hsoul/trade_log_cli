@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import reactRefresh from '@vitejs/plugin-react-refresh'
 import styleImport from 'vite-plugin-style-import'
 import path from 'path'
+import fs from 'fs';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -46,12 +47,19 @@ export default defineConfig({
   //   }
   // }
   server: {
+    https: true,
     proxy: {
+      https: {
+        key: fs.readFileSync('./key.pem'),
+        cert: fs.readFileSync('./cert.pem'),
+      },
+      host: '0.0.0.0',
       '/api': {
         // 当遇到 /api 路径时，将其转换成 target 的值
         target: 'http://localhost:7001/',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, '') // 将 /api 重写为空
+        rewrite: path => path.replace(/^\/api/, ''), // 将 /api 重写为空,
+        secure: false,
       }
     }
   },

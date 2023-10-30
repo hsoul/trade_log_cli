@@ -2,7 +2,7 @@
   "name": "juejue-vite-h5",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --mode development",
+    "dev": "vite --mode development --host",
     "build:beta": "vite build --mode beta",
     "build:release": "vite build --mode release",
     "serve": "vite preview"
@@ -21,6 +21,7 @@
     "react-captcha-code": "^1.0.7",
     "react-dom": "17.0.0",
     "react-router-dom": "^6.4.3",
+    "react-toastify": "^9.1.3",
     "zarm": "^2.9.16"
   },
   "devDependencies": {

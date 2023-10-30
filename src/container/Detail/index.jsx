@@ -37,8 +37,8 @@ const Detail = () => {
   const [enterReasonEditTitle, setEnterReasonEditTitle] = useState('');
 
   const [exitReasonItems, setExitReasonItems] = useState([
-    {id: '1', title: '反常', content: '趋势破坏'},
-    {id: '2', title: '异常', content: '突破支撑位'},
+    {id: '1', title: '反常', content: '趋势破坏sadfasdfasdfasdfasdfasdfasdfasdf'},
+    {id: '2', title: '异常', content: '突破支撑位asdfsajdfklasjdfklasjldfkjasdklfjaslkdfjsakldfjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj'},
   ]);
   const [exitReasonEditId, setExitReasonEditId] = useState(null);
   const [exitReasonEditTitle, setExitReasonEditTitle] = useState('');
@@ -255,7 +255,7 @@ const Detail = () => {
         <div>       
           <div className={s.time}>
             <span>出场理由</span>
-            <span>{detail.summarize}</span>
+            <span>{detail.exit_reason}</span>
           </div>
           {exitReasonItems.map((item, index) => 
             <Panel 

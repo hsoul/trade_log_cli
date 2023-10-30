@@ -104,12 +104,13 @@ const PopupAddBill = forwardRef(({ detail = {}, onReload }, ref) => {
       addBill()
       return
     }
-    // 当输入的值为 '.' 且 已经存在 '.'，则不让其继续字符串相加。
-    if (value == '.' && amount.includes('.')) return
-    // 小数点后保留两位，当超过两位时，不让其字符串继续相加。
-    if (value != '.' && amount.includes('.') && amount && amount.split('.')[1].length >= 2) return
-    // amount += value
-    setAmount(amount + value)
+    // amount = 2.9
+    // // 当输入的值为 '.' 且 已经存在 '.'，则不让其继续字符串相加。
+    // if (value == '.' && amount.includes('.')) return
+    // // 小数点后保留两位，当超过两位时，不让其字符串继续相加。
+    // if (value != '.' && amount.includes('.') && amount && amount.split('.')[1].length >= 2) return
+    // // amount += value
+    // setAmount(amount + value)
   }
   // 添加账单
   const addBill = async () => {

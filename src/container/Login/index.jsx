@@ -4,6 +4,7 @@ import cx from 'classnames';
 import Captcha from "react-captcha-code";
 import CustomIcon from '@/components/CustomIcon';
 import { post } from '@/utils'
+import { ToastContainer, toast } from 'react-toastify';
 
 import s from './style.module.less';
 
@@ -30,6 +31,8 @@ const Login = () => {
       return
     }
     try {
+      toast("开始登录")
+      Toast.show("开始登录");
       if (type == 'login') {
         console.log('login', username, password)
         const { data } = await post('/api/user/login', {
