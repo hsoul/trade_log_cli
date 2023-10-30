@@ -21,13 +21,27 @@ const Detail = () => {
   const { id } = qs.parse(location.search);
   const [detail, setDetail] = useState({});
   const [durationTime, setDurationTime] = useState();
+
   const [items, setItems] = useState([
     {id: '1', title: 'item1', content: 'content1xdasfdf'},
     {id: '2', title: 'item2', content: 'content2'},
-    // ...
-  ]);
+  ])
   const [editId, setEditId] = useState(null);
   const [editTitle, setEditTitle] = useState('');
+
+  const [enterReasonItems, setEnterReasonItems] = useState([
+    {id: '1', title: '突破', content: '颈线突破'},
+    {id: '2', title: '回车', content: '回撤302'},
+  ])
+  const [enterReasonEditId, setEnterReasonEditId] = useState(null);
+  const [enterReasonEditTitle, setEnterReasonEditTitle] = useState('');
+
+  const [exitReasonItems, setExitReasonItems] = useState([
+    {id: '1', title: '反常', content: '趋势破坏'},
+    {id: '2', title: '异常', content: '突破支撑位'},
+  ]);
+  const [exitReasonEditId, setExitReasonEditId] = useState(null);
+  const [exitReasonEditTitle, setExitReasonEditTitle] = useState('');
   
   useEffect(() => {
     getDetail();
@@ -64,16 +78,8 @@ const Detail = () => {
     addRef.current && addRef.current.show()
   }
 
-  const listData = ['面板1内容', '面板2内容', '面板3内容'];
-
   function addItem() {
     setItems([...items, {id: Date.now().toString(), title: 'NewItem'}]);
-  }
-
-  function editItem(index) {
-    let newItems = [...items];
-    newItems[index].title = newItems[index].title + ' (已编辑)';
-    setItems(newItems);
   }
 
   function deleteItem(index) {
@@ -90,6 +96,46 @@ const Detail = () => {
   function saveEdit(id) {
     setItems(items.map((item) => item.id === id ? { ...item, content: editTitle } : item));
     setEditId(null);
+  }
+
+  function addEnterReasonItem() {
+    setEnterReasonItems([...enterReasonItems, {id: Date.now().toString(), title: 'NewItem'}]);
+  }
+
+  function deleteEnterReasonItem(index) {
+    let newItems = [...enterReasonItems];
+    newItems.splice(index, 1);
+    setEnterReasonItems(newItems);
+  }
+
+  function onEnterReasonEdit(item) {
+    setEnterReasonEditId(item.id);
+    setEnterReasonEditTitle(item.title);
+  };
+
+  function saveEnterReasonEdit(id) {
+    setEnterReasonItems(enterReasonItems.map((item) => item.id === id ? { ...item, content: enterReasonEditTitle } : item));
+    setEnterReasonEditId(null);
+  }
+
+  function addExitReasonItem() {
+    setExitReasonItems([...exitReasonItems, {id: Date.now().toString(), title: 'NewItem'}]);
+  }
+
+  function deleteExitReasonItem(index) {
+    let newItems = [...exitReasonItems];
+    newItems.splice(index, 1);
+    setExitReasonItems(newItems);
+  }
+
+  function onExitReasonEdit(item) {
+    setExitReasonEditId(item.id);
+    setExitReasonEditTitle(item.title);
+  };
+
+  function saveExitReasonEdit(id) {
+    setExitReasonItems(exitReasonItems.map((item) => item.id === id ? { ...item, content: exitReasonEditTitle } : item));
+    setExitReasonEditId(null);
   }
 
   return <div className={s.detail}>
@@ -167,13 +213,73 @@ const Detail = () => {
           <span>成交价格</span>
           <span>{detail.finish_price}</span>
         </div>
-        <div className={s.time}>
+        {/* <div className={s.time}>
           <span>进场理由</span>
           <span></span>
         </div>
         <div className={s.time}>
           <span>出场理由</span>
           <span>{detail.exit_reason}</span>
+        </div> */}
+
+        <div>       
+          <div className={s.time}>
+            <span>进场理由</span>
+            <span>{detail.summarize}</span>
+          </div>
+          {enterReasonItems.map((item, index) => 
+            <Panel 
+              key={index}
+              title={item.content}
+              more={
+                <div>
+                  <Button onClick={() => deleteEnterReasonItem(index)}>删除</Button>
+                  <Button onClick={() => onEnterReasonEdit(item)}>编辑</Button>
+                </div>
+              }
+            >
+              {enterReasonEditId === item.id ? (
+                <div>
+                  <input type="text" value={enterReasonEditTitle} onChange={(e) => setEnterReasonEditTitle(e.target.value)} />
+                  <button onClick={() => saveEnterReasonEdit(item.id)}>Save</button>
+                  <button onClick={() => setEnterReasonEditId(null)}>Cancel</button>
+                </div>
+              ) : (
+                ""
+              )}
+            </Panel>
+          )}
+          <Button onClick={addEnterReasonItem}>+</Button>
+        </div>
+
+        <div>       
+          <div className={s.time}>
+            <span>出场理由</span>
+            <span>{detail.summarize}</span>
+          </div>
+          {exitReasonItems.map((item, index) => 
+            <Panel 
+              key={index}
+              title={item.content}
+              more={
+                <div>
+                  <Button onClick={() => deleteExitReasonItem(index)}>删除</Button>
+                  <Button onClick={() => onExitReasonEdit(item)}>编辑</Button>
+                </div>
+              }
+            >
+              {exitReasonEditId === item.id ? (
+                <div>
+                  <input type="text" value={exitReasonEditTitle} onChange={(e) => setExitReasonEditTitle(e.target.value)} />
+                  <button onClick={() => saveExitReasonEdit(item.id)}>Save</button>
+                  <button onClick={() => setExitReasonEditId(null)}>Cancel</button>
+                </div>
+              ) : (
+                ""
+              )}
+            </Panel>
+          )}
+          <Button onClick={addExitReasonItem}>+</Button>
         </div>
 
         <div>       
@@ -199,45 +305,12 @@ const Detail = () => {
                   <button onClick={() => setEditId(null)}>Cancel</button>
                 </div>
               ) : (
-                item.title
+                ""
               )}
-              {/* <div> {item.content} </div> */}
             </Panel>
           )}
-          <Button onClick={addItem}>添加</Button>
+          <Button onClick={addItem}>+</Button>
         </div>
-        
-        {/* <div className={s.remark}>
-          <span>交易理由</span>
-          <Collapse
-            disabled
-            activeKey={['0', '1']}
-            animated={true}
-            multiple={true}
-            onChange={(activeKey) => {
-              console.log(activeKey);
-              setActiveKey(activeKey);
-            }}
-          >
-            {
-              listData.map((item, index) => (
-                <Collapse.Item key={index} title={`面板${index + 1}`}>
-
-                </Collapse.Item>
-              ))
-            }
-
-            <Collapse.Item key="1" title="第一项">
-              This is content of item1. This is content of item1. This is content of item1.
-            </Collapse.Item>
-            <Collapse.Item key="2" title="第二项">
-              This is content of item2. This is content of item2. This is content of item2.
-            </Collapse.Item>
-            <Collapse.Item key="3" title="第三项">
-              This is content of item3. This is content of item3. This is content of item3.
-            </Collapse.Item>
-          </Collapse>
-        </div> */}
       </div>
       <div className={s.operation}>
         <span onClick={deleteDetail}><CustomIcon type='shanchu' />删除</span>
