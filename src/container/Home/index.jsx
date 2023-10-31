@@ -43,8 +43,6 @@ const Home = () => {
     const getBillList = async () => {
       console.log("getBillList")
       const { data } = await get(`/api/tradelog/list?trade_type=${currentSelect.id}&filter_date=${currentTime}&end_date=${endDate}&time_filter_type=${dateType.id}&dir_filter_type=${currentDir.id}&page=1`);
-      // const { data } = await get(`/api/tradelog/list?filter_date=${currentTime}&end_date='2023-10-24'&time_filter_type='year'&dir_filter_type='all'&page=1`);
-      // const { data } = await get(`/api/tradelog/list?filter_date=2023&time_filter_type=year&dir_filter_type=${'all'}&page=1`);
       console.log("getBillList", data)
       const sorted_list = data.list.sort((a, b) => {
         return new Date(b.date) - new Date(a.date)

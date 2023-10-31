@@ -1,15 +1,32 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { Cell, Input, Button, Checkbox, Toast } from 'zarm';
 import cx from 'classnames';
-import Captcha from "react-captcha-code";
+// import Captcha from "react-captcha-code";
 import CustomIcon from '@/components/CustomIcon';
 import { post } from '@/utils'
 import { ToastContainer, toast } from 'react-toastify';
 
 import s from './style.module.less';
 
+function stringify(obj) {
+  let cache = [];
+  let str = JSON.stringify(obj, function(key, value) {
+    if (typeof value === "object" && value !== null) {
+      if (cache.indexOf(value) !== -1) {
+        // Circular reference found, discard key
+        return;
+      }
+      // Store value in our collection
+      cache.push(value);
+    }
+    return value;
+  });
+  cache = null; // reset the cache
+  return str;
+}
+
 const Login = () => {
-  const captchaRef = useRef();
+  // const captchaRef = useRef();
   const [type, setType] = useState('login'); // 登录注册类型
   const [captcha, setCaptcha] = useState(''); // 验证码变化后存储值
   const [username, setUsername] = useState(''); // 账号
@@ -22,6 +39,7 @@ const Login = () => {
   }, []);
   
   const onSubmit = async () => {
+    console.log('onSubmit', type, username, password)
     if (!username) {
       Toast.show('请输入账号')
       return
@@ -31,8 +49,7 @@ const Login = () => {
       return
     }
     try {
-      toast("开始登录")
-      Toast.show("开始登录");
+      // Toast.show({content:"开始登录" + username + '-' + password, duration: 3000});
       if (type == 'login') {
         console.log('login', username, password)
         const { data } = await post('/api/user/login', {
@@ -42,14 +59,14 @@ const Login = () => {
         localStorage.setItem('token', data.token);
         window.location.href = '/';
       } else {
-        if (!verify) {
-          Toast.show('请输入验证码')
-          return
-        };
-        if (verify != captcha) {
-          Toast.show('验证码错误')
-          return
-        };
+        // if (!verify) {
+        //   Toast.show('请输入验证码')
+        //   return
+        // };
+        // if (verify != captcha) {
+        //   Toast.show('验证码错误')
+        //   return
+        // };
         const { data } = await post('/api/user/register', {
           username,
           password
@@ -58,7 +75,8 @@ const Login = () => {
         setType('login');
       }
     } catch (err) {
-      Toast.show(err.msg);
+      Toast.show({content:stringify(err), duration: 10000});
+      // console.log(util.inspect(err, {showHidden: false, depth: null}))
     }
   };
 
