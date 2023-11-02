@@ -213,15 +213,6 @@ const Detail = () => {
           <span>成交价格</span>
           <span>{detail.finish_price}</span>
         </div>
-        {/* <div className={s.time}>
-          <span>进场理由</span>
-          <span></span>
-        </div>
-        <div className={s.time}>
-          <span>出场理由</span>
-          <span>{detail.exit_reason}</span>
-        </div> */}
-
         <div>       
           <div className={s.time}>
             <span>进场理由</span>
