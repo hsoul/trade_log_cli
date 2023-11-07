@@ -1678,7 +1678,7 @@ warning@^4.0.3:
   dependencies:
     loose-envify "^1.0.0"
 
-zarm@^2.9.16:
+zarm@^2.9.19:
   version "2.9.19"
   resolved "https://registry.npmjs.org/zarm/-/zarm-2.9.19.tgz"
   integrity sha512-cZSyQwfTJkjgRVaku2r1RGx5NE9jLSlP6blBe9tMuvx3xiy1wdt8ZgF3rCOozpGyZSxAzJRzam4q2DCnUvx5zQ==

@@ -15,35 +15,34 @@ import s from './style.module.less'
 
 const Home = () => {
   try {
-    const dirRef = useRef(); // 方向 ref
-    const typeRef = useRef(); // 类型 ref
-    const dateTypeRef = useRef();
-    const monthRef = useRef(); // 月份筛选 ref
-    const endDateRef = useRef(); // 添加账单 ref
-    const addRef = useRef(); // 添加账单 ref
-    const [totalLoss, setTotalLoss] = useState(0); // 亏损
-    const [totalIncome, setTotalIncome] = useState(0); // 盈利
-    const [totalWin, setTotalWin] = useState(0); // 汇总
-    const [currentDir, setcurrentDir] = useState({id: 'all', name: '总'}); // 当前筛选方向类型
-    const [currentSelect, setCurrentSelect] = useState({id:'all', name:"所有"}); // 当前筛选类型
-    const [dateType, setDateType] = useState({id:"year", name: "年"}); // 当前筛选类型 period
-    const [datePickMode, setDatePickMode] = useState("year");
-    const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY')); // 当前筛选时间
-    const [endDate, setEndDate] = useState(dayjs().format('YYYY-MM-DD')); // 当前筛选时间
-    const [page, setPage] = useState(1); // 分页
-    const [list, setList] = useState([]); // 账单列表
-    const [totalPage, setTotalPage] = useState(0); // 分页总数
-    const [refreshing, setRefreshing] = useState(REFRESH_STATE.normal); // 下拉刷新状态
-    const [loading, setLoading] = useState(LOAD_STATE.normal); // 上拉加载状态
+    const dirRef = useRef() // 方向 ref
+    const typeRef = useRef() // 类型 ref
+    const dateTypeRef = useRef()
+    const monthRef = useRef() // 月份筛选 ref
+    const endDateRef = useRef() // 添加账单 ref
+    const addRef = useRef() // 添加账单 ref
+    const [totalLoss, setTotalLoss] = useState(0) // 亏损
+    const [totalIncome, setTotalIncome] = useState(0) // 盈利
+    const [totalWin, setTotalWin] = useState(0) // 汇总
+    const [currentDir, setcurrentDir] = useState({id: 'all', name: '总'}) // 当前筛选方向类型
+    const [currentSelect, setCurrentSelect] = useState({id:'all', name:"所有"}) // 当前筛选类型
+    const [dateType, setDateType] = useState({id:"year", name: "年"}) // 当前筛选类型 period
+    const [datePickMode, setDatePickMode] = useState("year")
+    const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY')) // 当前筛选时间
+    const [endDate, setEndDate] = useState(dayjs().format('YYYY-MM-DD')) // 当前筛选时间
+    const [page, setPage] = useState(1) // 分页
+    const [list, setList] = useState([]) // 账单列表
+    const [totalPage, setTotalPage] = useState(0) // 分页总数
+    const [refreshing, setRefreshing] = useState(REFRESH_STATE.normal) // 下拉刷新状态
+    const [loading, setLoading] = useState(LOAD_STATE.normal) // 上拉加载状态
   
     useEffect(() => {
       getBillList() // 初始化
     }, [page, currentSelect, currentTime, endDate, currentDir])
   
     const getBillList = async () => {
-      console.log("getBillList")
-      const { data } = await get(`/api/tradelog/list?trade_type=${currentSelect.id}&filter_date=${currentTime}&end_date=${endDate}&time_filter_type=${dateType.id}&dir_filter_type=${currentDir.id}&page=1`);
-      console.log("getBillList", data)
+      // console.log("getBillList")
+      const { data } = await get(`/api/tradelog/list?trade_type=${currentSelect.id}&filter_date=${currentTime}&end_date=${endDate}&time_filter_type=${dateType.id}&dir_filter_type=${currentDir.id}&page=${page}`)
       const sorted_list = data.list.sort((a, b) => {
         return new Date(b.date) - new Date(a.date)
       }).map(item => {
@@ -55,62 +54,63 @@ const Home = () => {
         }
       })
   
-      console.log(sorted_list)
+      console.log("getBillList", sorted_list, page)
       
       if (page == 1) { // 下拉刷新，重制数据
-        setList(data.list);
+        setList(data.list)
       } else {
-        setList(list.concat(data.list));
+        setList(list.concat(data.list))
       }
-      setTotalLoss(String(data.total_out.toFixed(2)).padEnd(5, ' '));
-      setTotalIncome(data.total_income.toFixed(2));
-      setTotalWin((data.total_out + data.total_income).toFixed(2));
-      setTotalPage(data.total_page);
+      setTotalLoss(String(data.total_out.toFixed(2)).padEnd(5, ' '))
+      setTotalIncome(data.total_income.toFixed(2))
+      setTotalWin((data.total_out + data.total_income).toFixed(2))
+      setTotalPage(data.total_page)
       // 上滑加载状态
-      setLoading(LOAD_STATE.success);
-      setRefreshing(REFRESH_STATE.success);
+      setLoading(LOAD_STATE.success)
+      setRefreshing(REFRESH_STATE.success)
     }
   
     // 请求列表数据
     const refreshData = () => {
-      setRefreshing(REFRESH_STATE.loading);
+      setRefreshing(REFRESH_STATE.loading)
       console.log("refreshData", page)
       if (page != 1) {
-        setPage(1);
+        setPage(1)
       } else {
-        getBillList();
-      };
-    };
+        getBillList()
+      }
+    }
   
     const loadData = () => {
+      console.log("loadData", page)
       if (page < totalPage) {
-        setLoading(LOAD_STATE.loading);
-        setPage(page + 1);
+        setLoading(LOAD_STATE.loading)
+        setPage(page + 1)
       }
     }
 
     // 添加方向弹窗
     const dirToggle = () => {
       dirRef.current && dirRef.current.show()
-    };
+    }
 
     // 添加账单弹窗
     const toggle = () => {
       typeRef.current && typeRef.current.show()
-    };
+    }
 
     const dateTypeToggle = () => {
       dateTypeRef.current && dateTypeRef.current.show()
-    };
+    }
 
     // 选择月份弹窗
     const monthToggle = () => {
       monthRef.current && monthRef.current.show()
-    };
+    }
 
     const endDateToggle = () => {
       endDateRef.current && endDateRef.current.show()
-    };
+    }
 
     // 添加账单弹窗
     const addToggle = () => {
@@ -119,22 +119,21 @@ const Home = () => {
 
     // 筛选方向类型
     const selectDir = (item) => {
-      setRefreshing(REFRESH_STATE.loading);
-      setPage(1);
+      setRefreshing(REFRESH_STATE.loading)
+      setPage(1)
       setcurrentDir(item)
     }
   
     // 筛选做单类型
     const select = (item) => {
-      setRefreshing(REFRESH_STATE.loading);
-      setPage(1);
+      setRefreshing(REFRESH_STATE.loading)
+      setPage(1)
       setCurrentSelect(item)
     }
 
     // 筛选日期类型
     const selectDateType = (item) => {
-      // setRefreshing(REFRESH_STATE.loading);
-      setPage(1);
+      // setPage(1)
       setDateType(item)
       console.log(item)
       if (item.id != "period") {
@@ -147,15 +146,15 @@ const Home = () => {
 
     // 筛选月份
     const selectMonth = (item) => {
-      setRefreshing(REFRESH_STATE.loading);
-      setPage(1);
+      setRefreshing(REFRESH_STATE.loading)
+      setPage(1)
       setCurrentTime(item)
     }
 
     // 筛选结束时间
     const selectEndDate = (item) => {
-      setRefreshing(REFRESH_STATE.loading);
-      setPage(1);
+      setRefreshing(REFRESH_STATE.loading)
+      setPage(1)
       setEndDate(item)
     }
   
@@ -220,6 +219,6 @@ const Home = () => {
   {
     console.log(error)
   }
-};
+}
 
-export default Home;
+export default Home

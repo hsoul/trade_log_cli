@@ -4,7 +4,6 @@ import cx from 'classnames';
 // import Captcha from "react-captcha-code";
 import CustomIcon from '@/components/CustomIcon';
 import { post } from '@/utils'
-import { ToastContainer, toast } from 'react-toastify';
 
 import s from './style.module.less';
 

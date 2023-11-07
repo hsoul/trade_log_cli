@@ -12,8 +12,15 @@ const PopupDate = forwardRef(({ onSelect, mode = 'date' }, ref) => {
     setShow(false)
     if (mode == 'month') {
       onSelect(dayjs(item).format('YYYY-MM'))
-    } else if (mode == 'date') {
+    } 
+    else if (mode == 'date') {
       onSelect(dayjs(item).format('YYYY-MM-DD'))
+    }
+    else if (mode == 'datetime') {
+      onSelect(dayjs(item).format('YYYY-MM-DD HH:mm:ss'))
+    }
+    else if (mode == 'year') {
+      onSelect(dayjs(item).format('YYYY'))
     }
   }
 

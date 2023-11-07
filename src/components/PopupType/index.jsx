@@ -15,7 +15,7 @@ const PopupType = forwardRef(({ onSelect }, ref) => {
   useEffect(() => {
     (async () => {
       const { data } = await get('/api/tradelog/types') // 请求标签接口放在弹窗内，这个弹窗可能会被复用，所以请求如果放在外面，会造成代码冗余。
-      console.log("popup-type", data)
+      // console.log("popup-type", data)
       setDir(data.dir)
       setTradeType(data.trade_type)
     })()

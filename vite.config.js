@@ -56,7 +56,7 @@ export default defineConfig({
       host: '0.0.0.0',
       '/api': {
         // 当遇到 /api 路径时，将其转换成 target 的值
-        target: 'http://101.34.151.30:7001/',
+        target: 'http://101.34.151.30:7002/',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, ''), // 将 /api 重写为空,
         secure: false,

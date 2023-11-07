@@ -12,6 +12,12 @@ import moment from 'moment';
 
 import s from './style.module.less'
 
+const INPUT_TYPE = {
+  start_reason: 1,
+  exit_reason: 2,
+  summarize: 3,
+}
+
 const Detail = () => {
   try {
   const addRef = useRef();
@@ -22,27 +28,10 @@ const Detail = () => {
   const [detail, setDetail] = useState({});
   const [durationTime, setDurationTime] = useState();
 
-  const [items, setItems] = useState([
-    {id: '1', title: 'item1', content: 'content1xdasfdf'},
-    {id: '2', title: 'item2', content: 'content2'},
-  ])
-  const [editId, setEditId] = useState(null);
-  const [editTitle, setEditTitle] = useState('');
-
-  const [enterReasonItems, setEnterReasonItems] = useState([
-    {id: '1', title: '突破', content: '颈线突破'},
-    {id: '2', title: '回车', content: '回撤302'},
-  ])
-  const [enterReasonEditId, setEnterReasonEditId] = useState(null);
-  const [enterReasonEditTitle, setEnterReasonEditTitle] = useState('');
-
-  const [exitReasonItems, setExitReasonItems] = useState([
-    {id: '1', title: '反常', content: '趋势破坏sadfasdfasdfasdfasdfasdfasdfasdf'},
-    {id: '2', title: '异常', content: '突破支撑位asdfsajdfklasjdfklasjldfkjasdklfjaslkdfjsakldfjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj'},
-  ]);
-  const [exitReasonEditId, setExitReasonEditId] = useState(null);
-  const [exitReasonEditTitle, setExitReasonEditTitle] = useState('');
-  
+  const [showStartReason, setShowStartReason] = useState();
+  const [showExitReason, setShowExitReason] = useState();
+  const [showSummarize, setShowSummarize] = useState();
+    
   useEffect(() => {
     getDetail();
   }, []);
@@ -78,65 +67,17 @@ const Detail = () => {
     addRef.current && addRef.current.show()
   }
 
-  function addItem() {
-    setItems([...items, {id: Date.now().toString(), title: 'NewItem'}]);
-  }
-
-  function deleteItem(index) {
-    let newItems = [...items];
-    newItems.splice(index, 1);
-    setItems(newItems);
-  }
-
-  function onEdit(item) {
-    setEditId(item.id);
-    setEditTitle(item.title);
+  const toggleVisibility = (type) => {
+    if (type == INPUT_TYPE.start_reason)
+      setShowStartReason(!showStartReason)
+    else if (type == INPUT_TYPE.exit_reason)
+      setShowExitReason(!showExitReason)
+    else if (type == INPUT_TYPE.summarize)
+      setShowSummarize(!showSummarize)
+    else
+      console.log("toggleVisibility error", type)
+    console.log("toggleVisibility", type, showStartReason, showExitReason, showSummarize)
   };
-
-  function saveEdit(id) {
-    setItems(items.map((item) => item.id === id ? { ...item, content: editTitle } : item));
-    setEditId(null);
-  }
-
-  function addEnterReasonItem() {
-    setEnterReasonItems([...enterReasonItems, {id: Date.now().toString(), title: 'NewItem'}]);
-  }
-
-  function deleteEnterReasonItem(index) {
-    let newItems = [...enterReasonItems];
-    newItems.splice(index, 1);
-    setEnterReasonItems(newItems);
-  }
-
-  function onEnterReasonEdit(item) {
-    setEnterReasonEditId(item.id);
-    setEnterReasonEditTitle(item.title);
-  };
-
-  function saveEnterReasonEdit(id) {
-    setEnterReasonItems(enterReasonItems.map((item) => item.id === id ? { ...item, content: enterReasonEditTitle } : item));
-    setEnterReasonEditId(null);
-  }
-
-  function addExitReasonItem() {
-    setExitReasonItems([...exitReasonItems, {id: Date.now().toString(), title: 'NewItem'}]);
-  }
-
-  function deleteExitReasonItem(index) {
-    let newItems = [...exitReasonItems];
-    newItems.splice(index, 1);
-    setExitReasonItems(newItems);
-  }
-
-  function onExitReasonEdit(item) {
-    setExitReasonEditId(item.id);
-    setExitReasonEditTitle(item.title);
-  };
-
-  function saveExitReasonEdit(id) {
-    setExitReasonItems(exitReasonItems.map((item) => item.id === id ? { ...item, content: exitReasonEditTitle } : item));
-    setExitReasonEditId(null);
-  }
 
   return <div className={s.detail}>
     <Header title='交易详情' />
@@ -190,16 +131,20 @@ const Detail = () => {
           <span>{detail.num}</span>
         </div>
         <div className={s.time}>
-          <span>盈利</span>
+          <span>收益</span>
           <span>{detail.income}</span>
         </div>
         <div className={s.time}>
-          <span>持仓价格</span>
+          <span>开仓均价</span>
           <span>{detail.start_price}</span>
         </div>
         <div className={s.time}>
+          <span>平仓均价</span>
+          <span>{detail.finish_price}</span>
+        </div>
+        <div className={s.time}>
           <span>止盈</span>
-          <span>{detail.stop_win}</span>
+          <span>{detail.promise_money}</span>
         </div>
         <div className={s.time}>
           <span>止损</span>
@@ -209,99 +154,36 @@ const Detail = () => {
           <span>强平</span>
           <span>{detail.force_price}</span>
         </div>
-        <div className={s.time}>
-          <span>成交价格</span>
-          <span>{detail.finish_price}</span>
-        </div>
-        <div>       
-          <div className={s.time}>
-            <span>进场理由</span>
-            <span>{detail.summarize}</span>
-          </div>
-          {enterReasonItems.map((item, index) => 
-            <Panel 
-              key={index}
-              title={item.content}
-              more={
-                <div>
-                  <Button onClick={() => deleteEnterReasonItem(index)}>删除</Button>
-                  <Button onClick={() => onEnterReasonEdit(item)}>编辑</Button>
-                </div>
-              }
-            >
-              {enterReasonEditId === item.id ? (
-                <div>
-                  <input type="text" value={enterReasonEditTitle} onChange={(e) => setEnterReasonEditTitle(e.target.value)} />
-                  <button onClick={() => saveEnterReasonEdit(item.id)}>Save</button>
-                  <button onClick={() => setEnterReasonEditId(null)}>Cancel</button>
-                </div>
-              ) : (
-                ""
-              )}
-            </Panel>
-          )}
-          <Button onClick={addEnterReasonItem}>+</Button>
-        </div>
+        {
+          detail.start_reason && (
+            <div>
+              <span>{'开仓理由:'}</span>
+              <button onClick={() => toggleVisibility(INPUT_TYPE.start_reason)}>{(showStartReason && detail.start_reason ? '隐藏' : '显示')} </button>
+              {showStartReason && <p style={{whiteSpace: "pre-line"}}>{detail.start_reason}</p>}
+            </div>
+          )
+        }
 
-        <div>       
-          <div className={s.time}>
-            <span>出场理由</span>
-            <span>{detail.exit_reason}</span>
-          </div>
-          {exitReasonItems.map((item, index) => 
-            <Panel 
-              key={index}
-              title={item.content}
-              more={
-                <div>
-                  <Button onClick={() => deleteExitReasonItem(index)}>删除</Button>
-                  <Button onClick={() => onExitReasonEdit(item)}>编辑</Button>
-                </div>
-              }
-            >
-              {exitReasonEditId === item.id ? (
-                <div>
-                  <input type="text" value={exitReasonEditTitle} onChange={(e) => setExitReasonEditTitle(e.target.value)} />
-                  <button onClick={() => saveExitReasonEdit(item.id)}>Save</button>
-                  <button onClick={() => setExitReasonEditId(null)}>Cancel</button>
-                </div>
-              ) : (
-                ""
-              )}
-            </Panel>
-          )}
-          <Button onClick={addExitReasonItem}>+</Button>
-        </div>
+        {
+          detail.exit_reason && (
+            <div>
+              <span>{'平仓理由:'}</span>
+              <button onClick={() => toggleVisibility(INPUT_TYPE.exit_reason)}>{(showExitReason && detail.exit_reason ? '隐藏' : '显示')} </button>
+              {showExitReason && <p style={{whiteSpace: "pre-line"}}>{detail.exit_reason}</p>}
+            </div>
+          )
+        }
 
-        <div>       
-          <div className={s.time}>
-            <span>总结</span>
-            <span>{detail.summarize}</span>
-          </div>
-          {items.map((item, index) => 
-            <Panel 
-              key={index}
-              title={item.content}
-              more={
-                <div>
-                  <Button onClick={() => deleteItem(index)}>删除</Button>
-                  <Button onClick={() => onEdit(item)}>编辑</Button>
-                </div>
-              }
-            >
-              {editId === item.id ? (
-                <div>
-                  <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
-                  <button onClick={() => saveEdit(item.id)}>Save</button>
-                  <button onClick={() => setEditId(null)}>Cancel</button>
-                </div>
-              ) : (
-                ""
-              )}
-            </Panel>
-          )}
-          <Button onClick={addItem}>+</Button>
-        </div>
+        {
+          detail.start_reason && (
+            <div>
+              <span>{'总结:'}</span>
+              <button onClick={() => toggleVisibility(INPUT_TYPE.summarize)}>{(showSummarize && detail.summarize ? '隐藏' : '显示')} </button>
+              {showSummarize && <p style={{whiteSpace: "pre-line"}}>{detail.summarize}</p>}
+            </div>
+          )
+        }
+
       </div>
       <div className={s.operation}>
         <span onClick={deleteDetail}><CustomIcon type='shanchu' />删除</span>
