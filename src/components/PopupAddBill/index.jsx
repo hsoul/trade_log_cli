@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Popup, Icon, Toast, KeyboardPicker, Keyboard, Modal, Input, Cell, DatePicker, DateSelect, Button, Panel, Switch } from 'zarm';
+import { Popup, Icon, Toast, KeyboardPicker, Keyboard, Modal, Input, DatePicker, DateSelect, Button, Panel, Switch } from 'zarm';
 import cx from 'classnames'
 import dayjs from 'dayjs'; 
 import CustomIcon from '../CustomIcon'
@@ -135,8 +135,6 @@ const PopupAddBill = forwardRef(({ detail = {}, onReload }, ref) => {
     // };
     // console.log("getList", data)
   }
-
-  
 
   // 日期弹窗
   const handleDatePop = (type) => {
@@ -450,7 +448,9 @@ const PopupAddBill = forwardRef(({ detail = {}, onReload }, ref) => {
         {
           showRemark == INPUT_TYPE.start_reason ? (
             <div>
-              <span onClick={() => setShowTextInput(INPUT_TYPE.start_reason)}>{'开仓理由:'}</span>
+              <div className={s.titlediv}>
+                <span className={s.sufix} onClick={() => setShowTextInput(INPUT_TYPE.start_reason)}>{'开仓理由:'}</span>
+              </div>
               <Input
                 autoHeight
                 showLength
@@ -459,18 +459,24 @@ const PopupAddBill = forwardRef(({ detail = {}, onReload }, ref) => {
                 rows={3}
                 value={startReason}
                 placeholder="请输开仓理由"
-                onChange={(val) => setStartReason(val)}
+                onChange={(event) => setStartReason(event.target.value)}
                 onBlur={() => setShowTextInput(null)}
                 onFocus={textInputOnFocus}
               /> 
             </div>
           ): startReason ? (
             <div>
-              <span onClick={() => setShowTextInput(INPUT_TYPE.start_reason)}>{'开仓理由:'}</span>
-              <button onClick={() => toggleVisibility(INPUT_TYPE.start_reason)}>{(showStartReason && startReason ? '隐藏' : '显示')} </button>
+              <div className={s.titlediv}>
+                <span className={s.sufix} onClick={() => setShowTextInput(INPUT_TYPE.start_reason)}>{'开仓理由:'}</span>
+                <button className={s.rightitem} onClick={() => toggleVisibility(INPUT_TYPE.start_reason)}>{(showStartReason && startReason ? '隐藏' : '显示')} </button>
+              </div>
               {showStartReason && <p style={{whiteSpace: "pre-line"}}>{startReason}</p>}
             </div>
-          ) : <span onClick={() => setShowTextInput(INPUT_TYPE.start_reason)}>{'开仓理由:'}</span>
+          ) : (
+          <div className={s.titlediv}>
+            <span className={s.sufix} onClick={() => setShowTextInput(INPUT_TYPE.start_reason)}>{'开仓理由:'}</span>
+          </div>
+          )
         }
       </div>
       
@@ -478,8 +484,11 @@ const PopupAddBill = forwardRef(({ detail = {}, onReload }, ref) => {
         {
           showRemark == INPUT_TYPE.exit_reason ? (
           <div>
-            <span onClick={() => setShowTextInput(INPUT_TYPE.exit_reason)}>{'平仓理由:'}</span>
+            <div className={s.titlediv}>
+              <span className={s.sufix} onClick={() => setShowTextInput(INPUT_TYPE.exit_reason)}>{'平仓理由:'}</span>
+            </div>
             <Input
+              style={{marginTop: '2px'}} 
               autoHeight
               showLength
               maxLength={640}
@@ -487,17 +496,23 @@ const PopupAddBill = forwardRef(({ detail = {}, onReload }, ref) => {
               rows={3}
               value={exitReason}
               placeholder="请输平仓理由"
-              onChange={(val) => setExitReason(val)}
+              onChange={(event) => setExitReason(event.target.value)}
               onBlur={() => setShowTextInput(null)}
             />
           </div>
           ) : exitReason ? (
             <div>
-              <span onClick={() => setShowTextInput(INPUT_TYPE.exit_reason)}>{'平仓理由:'}</span>
-              <button onClick={() => toggleVisibility(INPUT_TYPE.exit_reason)}>{(showExitReason && exitReason ? '隐藏' : '显示')}  </button>
+              <div className={s.titlediv}>
+                <span className={s.sufix} onClick={() => setShowTextInput(INPUT_TYPE.exit_reason)}>{'平仓理由:'}</span>
+                <button className={s.rightitem} onClick={() => toggleVisibility(INPUT_TYPE.exit_reason)}>{(showExitReason && exitReason ? '隐藏' : '显示')}  </button>
+              </div>
               {showExitReason && <p style={{whiteSpace: "pre-line"}}>{exitReason}</p>}
             </div>
-          ) : <span onClick={() => setShowTextInput(INPUT_TYPE.exit_reason)}>{'平仓理由:'}</span> 
+          ) : (
+            <div className={s.titlediv}>
+              <span className={s.sufix} onClick={() => setShowTextInput(INPUT_TYPE.exit_reason)}>{'平仓理由:'}</span>
+            </div>
+          )
         }
       </div>
 
@@ -505,7 +520,9 @@ const PopupAddBill = forwardRef(({ detail = {}, onReload }, ref) => {
         {
           showRemark == INPUT_TYPE.summarize ? (
             <div>
-              <span onClick={() => setShowTextInput(INPUT_TYPE.summarize)}>{'总结:'}</span>
+              <div className={s.titlediv}>
+                <span className={s.sufix} onClick={() => setShowTextInput(INPUT_TYPE.summarize)}>{'总结:'}</span>
+              </div>
               <Input
                 autoHeight
                 showLength
@@ -514,17 +531,23 @@ const PopupAddBill = forwardRef(({ detail = {}, onReload }, ref) => {
                 rows={3}
                 value={summarize}
                 placeholder="请输入总结"
-                onChange={(val) => setSummarize(val)}
+                onChange={(event) => setSummarize(event.target.value)}
                 onBlur={() => setShowTextInput(null)}
               />
             </div> 
           ) : summarize ? (
             <div>
-              <span onClick={() => setShowTextInput(INPUT_TYPE.summarize)}>{'总结:'}</span>
-              <button onClick={() => toggleVisibility(INPUT_TYPE.summarize)}>{(showSummarize && summarize ? '隐藏' : '显示')}  </button>
+              <div className={s.titlediv}>
+                <span className={s.sufix} onClick={() => setShowTextInput(INPUT_TYPE.summarize)}>{'总结:'}</span>
+                <button className={s.rightitem} onClick={() => toggleVisibility(INPUT_TYPE.summarize)}>{(showSummarize && summarize ? '隐藏' : '显示')}</button>
+              </div>
               {showSummarize && <p style={{whiteSpace: "pre-line"}}>{summarize}</p>}
             </div>
-          ) : <span onClick={() => setShowTextInput(INPUT_TYPE.summarize)}>{'总结:'}</span>
+          ) : (
+            <div className={s.titlediv}>
+              <span className={s.sufix} onClick={() => setShowTextInput(INPUT_TYPE.summarize)}>{'总结:'}</span>
+            </div>
+          )
         }
       </div>
       {/* <KeyboardPicker type="price" visible={activeInput != null && show} onKeyClick={(value) => handleMoney(value)} />  */}

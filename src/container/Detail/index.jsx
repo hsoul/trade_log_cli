@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Modal, Toast, Collapse, Panel, Button, Cell} from 'zarm';
+import { Modal, Toast, Collapse, Panel, Button, List} from 'zarm';
 import qs from 'query-string';
 import cx from 'classnames';
 import dayjs from 'dayjs';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { Cell } from 'zarm';
+import { List } from 'zarm';
 import { useNavigate } from 'react-router-dom'
 import CustomIcon from '../CustomIcon';
 import { typeMap } from '@/utils';
@@ -55,7 +55,7 @@ const BillItem = ({ bill }) => {
       </div>
     </div>
     {
-      bill && bill.list.map(item => <Cell
+      bill && bill.list.map(item => <List.Item
         className={s.bill}
         key={item.id}
         onClick={() => goToDetail(item)}
@@ -69,10 +69,16 @@ const BillItem = ({ bill }) => {
             <span className='s.itemTitle'> { item.dir }</span>
           </>
         }
-        description={<span style={{ color: item.dir == '多' ? 'purple' : 'Blue' }}>{`${item.income < 0 ? '' : '+'}${item.income}`}</span>}
-        help={<div>{dayjs(Number(item.start_time * 1000)).format('HH:mm')} {item.end_time ? "-" + dayjs(Number(item.end_time * 1000)).format('HH:mm') : '    '} {item.dir ? `| ${item.dir}` : ''} </div>}
+        description={
+          <div>
+          <span style={{ color: item.dir == '多' ? 'purple' : 'Blue' }}>{`${item.income < 0 ? '' : '+'}${item.income}`}</span>
+            <div>
+              {dayjs(Number(item.start_time * 1000)).format('HH:mm')} {item.end_time ? "-" + dayjs(Number(item.end_time * 1000)).format('HH:mm') : '    '} {item.dir ? `| ${item.dir}` : ''} 
+            </div>
+          </div>
+        }
       >
-      </Cell>)
+      </List.Item>)
     }
   </div>
 };

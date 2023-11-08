@@ -1,5 +1,5 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
-import { Cell, Input, Button, Checkbox, Toast } from 'zarm';
+import { List, Input, Button, Checkbox, Toast } from 'zarm';
 import cx from 'classnames';
 // import Captcha from "react-captcha-code";
 import CustomIcon from '@/components/CustomIcon';
@@ -88,44 +88,48 @@ const Login = () => {
       <span className={cx({ [s.avtive]: type == 'login' })} onClick={() => setType('login')}>登录</span>
       <span className={cx({ [s.avtive]: type == 'register' })} onClick={() => setType('register')}>注册</span>
     </div>
-    <div className={s.form}>
-      <Cell icon={<CustomIcon type="zhanghao" />}>
-        <Input
-          clearable
-          type="text"
-          placeholder="请输入账号"
-          onChange={(value) => setUsername(value)}
-        />
-      </Cell>
-      <Cell icon={<CustomIcon type="mima" />}>
-        <Input
-          clearable
-          type="password"
-          placeholder="请输入密码"
-          onChange={(value) => setPassword(value)}
-        />
-      </Cell>
-      {
-        type == 'register' ? <Cell icon={<CustomIcon type="mima" />}>
-          <Input
-            clearable
-            type="text"
-            placeholder="请输入验证码"
-            onChange={(value) => setVerify(value)}
-          />
-          <Captcha ref={captchaRef} charNum={4} onChange={handleChange} />
-        </Cell> : null
-      }
-    </div>
-    <div className={s.operation}>
-      {
-        type == 'register' ? <div className={s.agree}>
-          <Checkbox />
-          <label className="text-light">阅读并同意<a>《掘掘手札条款》</a></label>
-        </div> : null
-      }
-      <Button onClick={onSubmit} block theme="primary">{type == 'login' ? '登录' : '注册'}</Button>
-    </div>
+    <form>
+      <div className={s.form}>
+        <List.Item icon={<CustomIcon type="zhanghao" />}>
+            <Input
+              clearable
+              type="text"
+              placeholder="请输入账号"
+              autoComplete="username"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+        </List.Item>
+        <List.Item>
+            <Input
+              clearable
+              type="password"
+              placeholder="请输入密码"
+              autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+        </List.Item>
+        {
+          type == 'register' ? <List icon={<CustomIcon type="mima" />}>
+            <Input
+              clearable
+              type="text"
+              placeholder="请输入验证码"
+              onChange={(e) => setVerify(e.target.value)}
+            />
+            {/* <Captcha ref={captchaRef} charNum={4} onChange={handleChange} /> */}
+          </List> : null
+        }
+      </div>
+      <div className={s.operation}>
+        {
+          type == 'register' ? <div className={s.agree}>
+            <Checkbox />
+            <label className="text-light">阅读并同意<a>《掘掘手札条款》</a></label>
+          </div> : null
+        }
+        <Button onClick={onSubmit} block theme="primary">{type == 'login' ? '登录' : '注册'}</Button>
+      </div>
+    </form>
   </div>
 };
 
