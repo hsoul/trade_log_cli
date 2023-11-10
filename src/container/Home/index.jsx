@@ -3,6 +3,7 @@ import { Icon, Pull } from 'zarm'
 import dayjs from 'dayjs'
 import PopupDir from '@/components/PopupDir'
 import PopupType from '@/components/PopupType'
+import PopupStrategyType from '@/components/PopupStrategyType'
 import PopupDateType from '@/components/PopupDateType'
 import PopupDate from '@/components/PopupDate'
 import PopupAddBill from '@/components/PopupAddBill'
@@ -17,6 +18,7 @@ const Home = () => {
   try {
     const dirRef = useRef() // 方向 ref
     const typeRef = useRef() // 类型 ref
+    const strategyRef = useRef();
     const dateTypeRef = useRef()
     const monthRef = useRef() // 月份筛选 ref
     const endDateRef = useRef() // 添加账单 ref
@@ -26,6 +28,7 @@ const Home = () => {
     const [totalWin, setTotalWin] = useState(0) // 汇总
     const [currentDir, setcurrentDir] = useState({id: 'all', name: '总'}) // 当前筛选方向类型
     const [currentSelect, setCurrentSelect] = useState({id:'all', name:"所有"}) // 当前筛选类型
+    const [currentStrategy, setCurrentStrategy] = useState(); // 当前筛选策略类型
     const [dateType, setDateType] = useState({id:"year", name: "年"}) // 当前筛选类型 period
     const [datePickMode, setDatePickMode] = useState("year")
     const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY')) // 当前筛选时间
@@ -40,7 +43,7 @@ const Home = () => {
 
     useEffect(() => {
       getBillList() // 初始化
-    }, [page, currentSelect, currentTime, endDate, currentDir])
+    }, [page, currentSelect, currentTime, endDate, currentDir, currentStrategy])
   
     const getBillList = async () => {
       if (isGettingList) {
@@ -50,7 +53,7 @@ const Home = () => {
         return
       }
       isGettingList = true
-      const { data } = await get(`/api/tradelog/list?trade_type=${currentSelect.id}&filter_date=${currentTime}&end_date=${endDate}&time_filter_type=${dateType.id}&dir_filter_type=${currentDir.id}&page=${page}`)
+      const { data } = await get(`/api/tradelog/list?trade_type=${currentSelect.id}&filter_date=${currentTime}&end_date=${endDate}&time_filter_type=${dateType.id}&dir_filter_type=${currentDir.id}&page=${page}&strategy=${currentStrategy && currentStrategy.id || 'all'}`)
       isGettingList = false
       const sorted_list = data.list.sort((a, b) => {
         return new Date(b.date) - new Date(a.date)
@@ -108,6 +111,10 @@ const Home = () => {
       typeRef.current && typeRef.current.show()
     }
 
+    const strategyToggle = () => {
+      strategyRef.current && strategyRef.current.show()
+    };
+
     const dateTypeToggle = () => {
       dateTypeRef.current && dateTypeRef.current.show()
     }
@@ -138,6 +145,11 @@ const Home = () => {
       setRefreshing(REFRESH_STATE.loading)
       setPage(1)
       setCurrentSelect(item)
+    }
+
+    const selectStrategy = (item) => {
+      console.log(item)
+      setCurrentStrategy(item)
     }
 
     // 筛选日期类型
@@ -181,6 +193,9 @@ const Home = () => {
           <div className={s.left} onClick={toggle}>
             <span className={s.title}>{ currentSelect.name || '类型' } <Icon className={s.arrow} type="arrow-bottom" /></span>
           </div>
+          <div className={s.left} onClick={strategyToggle}>
+            <span className={s.title}>{ currentStrategy && currentStrategy.name || '策略' } <Icon className={s.arrow} type="arrow-bottom"/></span>
+          </div>
           <div className={s.right}>
             <span className={s.time} onClick={dateTypeToggle}>{ dateType.name || "日期类型" } <Icon className={s.arrow} type="arrow-bottom" /></span>
           </div>
@@ -217,12 +232,13 @@ const Home = () => {
         }
       </div>
       <div className={s.add} onClick={addToggle}><CustomIcon type='tianjia' /></div>
-      <PopupDir ref={dirRef} onSelect={selectDir} />
-      <PopupType ref={typeRef} onSelect={select} />
-      <PopupDateType ref={dateTypeRef} onSelect={selectDateType} />
-      <PopupDate ref={monthRef} mode={datePickMode} onSelect={selectMonth} />
-      <PopupDate ref={endDateRef} mode={datePickMode} onSelect={selectEndDate} />
-      <PopupAddBill ref={addRef} onReload={refreshData} />
+      <PopupDir ref={dirRef} onSelect={selectDir}/>
+      <PopupType ref={typeRef} onSelect={select}/>
+      <PopupStrategyType ref={strategyRef} onSelect={selectStrategy}/>
+      <PopupDateType ref={dateTypeRef} onSelect={selectDateType}/>
+      <PopupDate ref={monthRef} mode={datePickMode} onSelect={selectMonth}/>
+      <PopupDate ref={endDateRef} mode={datePickMode} onSelect={selectEndDate}/>
+      <PopupAddBill ref={addRef} onReload={refreshData}/>
     </div>
   } catch (error)
   {

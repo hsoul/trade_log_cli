@@ -11,6 +11,7 @@ const PopupStrategyType = forwardRef(({ onSelect }, ref) => {
   const [active, setActive] = useState('all');
   const [strategyType, setStrategyType] = useState([
     {id:'SMC', name: "SMC"},
+    {id:'pinbar', name: "pinbar"},
   ])
 
   useEffect(() => {

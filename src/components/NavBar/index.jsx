@@ -19,7 +19,7 @@ const NavBar = ({ showNav }) => {
       <TabBar className={s.tab} activeKey={activeKey} onChange={chnageTab}>
         <TabBar.Item
           itemKey="/"
-          title="账单"
+          title="日志"
           icon={<CustomIcon type="zhangdan" />}
         />
         <TabBar.Item
