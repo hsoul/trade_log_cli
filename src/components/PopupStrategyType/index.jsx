@@ -9,16 +9,12 @@ import s from './style.module.less'
 const PopupStrategyType = forwardRef(({ onSelect }, ref) => {
   const [show, setShow] = useState(false);
   const [active, setActive] = useState('all');
-  const [dir, setDir] = useState([]) // 方向: 多、空、所有
-  const [tradeType, setTradeType] = useState([]) // 类型：长、中、多、极
+  const [strategyType, setStrategyType] = useState([
+    {id:'SMC', name: "SMC"},
+  ])
 
   useEffect(() => {
-    (async () => {
-      const { data } = await get('/api/tradelog/types') // 请求标签接口放在弹窗内，这个弹窗可能会被复用，所以请求如果放在外面，会造成代码冗余。
-      // console.log("popup-type", data)
-      setDir(data.dir)
-      setTradeType(data.trade_type)
-    })()
+
   }, [])
 
   if (ref) {
@@ -55,7 +51,7 @@ const PopupStrategyType = forwardRef(({ onSelect }, ref) => {
         <div className={s.title}>类型</div>
         <div className={s.incomeWrap}>
           {
-            tradeType.map((item, index) => <p key={index} onClick={() => choseType(item)} className={cx({[s.active]: active == item.id})} >{ item.name }</p>)
+            strategyType.map((item, index) => <p key={index} onClick={() => choseType(item)} className={cx({[s.active]: active == item.id})} >{ item.name }</p>)
           }
         </div>
       </div>

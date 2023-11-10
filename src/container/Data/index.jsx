@@ -8,6 +8,7 @@ import PopupDate from '@/components/PopupDate'
 import PopupDir from '@/components/PopupDir'
 import PopupType from '@/components/PopupType'
 import PopupDateType from '@/components/PopupDateType'
+import PopupStrategyType from '@/components/PopupStrategyType'
 import s from './style.module.less';
 
 let proportionChart = null
@@ -16,6 +17,7 @@ const  Data = () => {
   const dirRef = useRef(); // 方向 ref
   const typeRef = useRef(); // 类型 ref
   const dateTypeRef = useRef();
+  const strategyRef = useRef();
   const [datePickMode, setDatePickMode] = useState("month");
   const dateRef = useRef(); // 月份筛选 ref
   const endDateRef = useRef(); // 时间段筛选 ref
@@ -26,6 +28,7 @@ const  Data = () => {
   const [dateType, setDateType] = useState({name: '月', id: 'month'}); // 当前筛选类型 period
   const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY-MM')); // 当前筛选时间
   const [endDate, setEndDate] = useState(); // 当前筛选时间
+  const [currentStrategy, setCurrentStrategy] = useState(); // 当前筛选策略类型
 
   const [showData, setShowData] = useState({});
 
@@ -40,7 +43,7 @@ const  Data = () => {
       if (proportionChart)
         proportionChart.dispose(); // 每次组件卸载的时候，需要释放图表实例。clear 只是将其清空不会释放。
     }
-  }, [currentDir, currentSelect, currentTime, endDate]);
+  }, [currentDir, currentSelect, currentTime, endDate, currentStrategy]);
   
   const getData = async () => {
     let dirParam = currentDir
@@ -62,10 +65,10 @@ const  Data = () => {
         console.log("getData", "开始时间不能大于结束时间")
         return
       }
-      data = await get(`/api/tradelog/data?begin_date=${currentTime}&end_date=${endDate}&dir=${dirParam.id}&trade_type=${typeParam.id}`);
+      data = await get(`/api/tradelog/data?begin_date=${currentTime}&end_date=${endDate}&dir=${dirParam.id}&trade_type=${typeParam.id}&strategy=${currentStrategy && currentStrategy.id || 'all'}`);
     }
     else {
-      data = await get(`/api/tradelog/data?date=${currentTime}&dir=${dirParam.id}&trade_type=${typeParam.id}`);
+      data = await get(`/api/tradelog/data?date=${currentTime}&dir=${dirParam.id}&trade_type=${typeParam.id}&strategy=${currentStrategy && currentStrategy.id || 'all'}`);
       // data = await get(`/api/tradelog/data?date=2023-10&dir=${dirParam.id}&trade_type=${typeParam.id}`);
     }
 
@@ -133,6 +136,10 @@ const  Data = () => {
     dateTypeRef.current && dateTypeRef.current.show()
   };
 
+  const strategyToggle = () => {
+    strategyRef.current && strategyRef.current.show()
+  };
+
   // 选择月份弹窗
   const monthToggle = () => {
     monthRef.current && monthRef.current.show()
@@ -156,6 +163,11 @@ const  Data = () => {
   const select = (item) => {
     console.log(item)
     setCurrentSelect(item)
+  }
+
+  const selectStrategy = (item) => {
+    console.log(item)
+    setCurrentStrategy(item)
   }
 
   // 筛选日期类型
@@ -190,6 +202,9 @@ const  Data = () => {
         </div>
         <div className={s.left} onClick={toggle}>
           <span className={s.title}>{ currentSelect && currentSelect.name || '类型' } <Icon className={s.arrow} type="arrow-bottom" /></span>
+        </div>
+        <div className={s.left} onClick={strategyToggle}>
+          <span className={s.title}>{ currentStrategy && currentStrategy.name || '策略' } <Icon className={s.arrow} type="arrow-bottom" /></span>
         </div>
         <div className={s.left}>
           <span className={s.title} onClick={dateTypeToggle}>{ dateType && dateType.name || "日期类型" } <Icon className={s.arrow} type="arrow-bottom" /></span>
@@ -468,6 +483,7 @@ const  Data = () => {
     </div>
     <PopupDir ref={dirRef} onSelect={selectDir} />
     <PopupType ref={typeRef} onSelect={select} />
+    <PopupStrategyType ref={strategyRef} onSelect={selectStrategy} />
     <PopupDateType ref={dateTypeRef} onSelect={selectDateType} />
     <PopupDate ref={monthRef} mode={datePickMode} onSelect={selectMonth} />
     <PopupDate ref={endDateRef} mode={datePickMode} onSelect={selectEndDate} />
