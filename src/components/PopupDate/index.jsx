@@ -3,9 +3,18 @@ import PropTypes from 'prop-types'
 import { Popup, DatePicker  } from 'zarm'
 import dayjs from 'dayjs' 
 
+const DATE_TYPE = {
+  year: ['year'],
+  month: ['year', 'month'],
+  date: ['year', 'month', 'day'],
+  datetime: ['year', 'month', 'day', 'hour', 'minute'],
+}
+
 const PopupDate = forwardRef(({ onSelect, mode = 'date' }, ref) => {
+  console.log("PopupDate", mode)
   const [show, setShow] = useState(false)
   const [now, setNow] = useState(new Date())
+  
 
   const choseMonth = (item) => {
     setNow(item)
@@ -45,8 +54,8 @@ const PopupDate = forwardRef(({ onSelect, mode = 'date' }, ref) => {
       <DatePicker
         visible={show}
         value={now}
-        mode={mode}
-        onOk={choseMonth}
+        columnType= {DATE_TYPE[mode]}
+        onConfirm={choseMonth}
         onCancel={() => setShow(false)}
       />
     </div>
