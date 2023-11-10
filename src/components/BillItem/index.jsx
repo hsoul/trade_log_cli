@@ -40,17 +40,17 @@ const BillItem = ({ bill }) => {
     <div className={s.headerDate}>
       <div className={s.date}>{bill.date}</div>
       <div className={s.money}>
-        <span>
-          <img src="//s.yezgea02.com/1615953405599/zhi%402x.png" alt='支' />
-            <span>¥{ loss_num.toFixed(2) }</span>
+        <span className={s.item}>
+          <span className={s.name}>亏$:{' '}</span>
+          <span className={s.number} style={{ color: '#661313' }}>{ loss_num.toFixed(2).replace(/\.?0+$/, '') }</span>
         </span>
-        <span>
-          <img src="//s.yezgea02.com/1615953405599/shou%402x.png" alt="收" />
-          <span>¥{ win_num.toFixed(2) }</span>
+        <span className={s.item}>
+          <span className={s.name}>盈$: </span>
+          <span className={s.number} style={{ color: '#1ad026' }}>{ win_num.toFixed(2).replace(/\.?0+$/, '') }</span>
         </span>
-        <span>
-          <img src="//s.yezgea02.com/1615953405599/shou%402x.png" alt="收" />
-          <span>¥{ total_win_num.toFixed(2) }</span>
+        <span className={s.item}>
+          <span className={s.name}>合计$: </span>
+          <span className={s.number} style={{ color: total_win_num < 0 ? '#661313' : '#1ad026' }}>{ total_win_num.toFixed(2).replace(/\.?0+$/, '') }</span>
         </span>
       </div>
     </div>
@@ -60,20 +60,17 @@ const BillItem = ({ bill }) => {
         key={item.id}
         onClick={() => goToDetail(item)}
         title={
-          <>
-            <CustomIcon
-              className={s.itemIcon}
-              type={item.id}
-            />
-            <span className='s.title'>{ item.trade_type } {' '} </span>
-            <span className='s.itemTitle'> { item.dir }</span>
-          </>
+          <div className={s.itemlist}>
+            <span className={s.dir}>{ item.dir }</span>
+            <span className={s.strategy}>{ item.strategy }</span>
+            <span className={s.trade_type}>{item.trade_type}</span>
+            <span className={s.number} style={{ color: (Number(item.income) > 0) ? '#2ECC71' : '#D35400' }}>{`${item.income < 0 ? '' : '+'}${item.income}`}</span>
+          </div>
         }
         description={
           <div>
-          <span style={{ color: item.dir == '多' ? 'purple' : 'Blue' }}>{`${item.income < 0 ? '' : '+'}${item.income}`}</span>
             <div>
-              {dayjs(Number(item.start_time * 1000)).format('HH:mm')} {item.end_time ? "-" + dayjs(Number(item.end_time * 1000)).format('HH:mm') : '    '} {item.dir ? `| ${item.dir}` : ''} 
+              {dayjs(Number(item.start_time * 1000)).format('HH:mm')} {item.end_time ? "-" + dayjs(Number(item.end_time * 1000)).format('HH:mm') : '    '} 
             </div>
           </div>
         }
