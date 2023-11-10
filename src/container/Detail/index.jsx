@@ -54,7 +54,7 @@ const Detail = () => {
     Modal.confirm({
       title: '删除',
       content: '确认删除账单？',
-      onOk: async () => {
+      onConfirm: async () => {
         const { data } = await post('/api/tradelog/delete', { id })
         Toast.show('删除成功')
         navigateTo(-1)
@@ -175,7 +175,7 @@ const Detail = () => {
         }
 
         {
-          detail.start_reason && (
+          detail.summarize && (
             <div>
               <span>{'总结:'}</span>
               <button onClick={() => toggleVisibility(INPUT_TYPE.summarize)}>{(showSummarize && detail.summarize ? '隐藏' : '显示')} </button>
