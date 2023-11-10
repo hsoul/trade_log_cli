@@ -22,14 +22,7 @@ const  App = () => {
       <Routes>
         {routes.map(route => <Route exact key={route.path} path={route.path} element={<route.component />} />)}
       </Routes>
-      <NavBar style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '50px',
-        width: '100%',
-      }} showNav={showNav} />
+      <NavBar showNav={showNav}/>
     </>
   </ConfigProvider>;
 };

@@ -15,7 +15,8 @@ const NavBar = ({ showNav }) => {
   }
 
   return (
-    <TabBar className={s.tab} activeKey={activeKey} onChange={chnageTab}>
+    <div className={s.tabbar}>
+      <TabBar className={s.tab} activeKey={activeKey} onChange={chnageTab}>
         <TabBar.Item
           itemKey="/"
           title="账单"
@@ -32,6 +33,7 @@ const NavBar = ({ showNav }) => {
           icon={<CustomIcon type="wode" />}
         />
       </TabBar>
+    </div>
   );
 };
 

@@ -35,14 +35,23 @@ const Home = () => {
     const [totalPage, setTotalPage] = useState(0) // 分页总数
     const [refreshing, setRefreshing] = useState(REFRESH_STATE.normal) // 下拉刷新状态
     const [loading, setLoading] = useState(LOAD_STATE.normal) // 上拉加载状态
-  
+    
+    let isGettingList = false
+
     useEffect(() => {
       getBillList() // 初始化
     }, [page, currentSelect, currentTime, endDate, currentDir])
   
     const getBillList = async () => {
-      // console.log("getBillList")
+      if (isGettingList) {
+        setTimeout(() => {
+          refreshData()
+        }, 200)
+        return
+      }
+      isGettingList = true
       const { data } = await get(`/api/tradelog/list?trade_type=${currentSelect.id}&filter_date=${currentTime}&end_date=${endDate}&time_filter_type=${dateType.id}&dir_filter_type=${currentDir.id}&page=${page}`)
+      isGettingList = false
       const sorted_list = data.list.sort((a, b) => {
         return new Date(b.date) - new Date(a.date)
       }).map(item => {
