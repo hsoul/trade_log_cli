@@ -182,9 +182,9 @@ const Home = () => {
     return <div className={s.home}>
       <div className={s.header}>
         <div className={s.dataWrap}>
-          <span className={s.income}>总:<b style={{ color: totalWin < 0 ? '#661313' : '#1ad026' }}>$ {Number(totalWin).toFixed(2).replace(/\.?0+$/, '')}</b></span>
-          <span className={s.income}>盈:<b style={{ color: '#1ad026' }}>$ {Number(totalIncome).toFixed(2).replace(/\.?0+$/, '')}</b></span>
-          <span className={s.expense}>亏:<b style={{ color: '#661313' }}>$ {Number(totalLoss).toFixed(2).replace(/\.?0+$/, '')}</b></span>
+          <span className={s.income}>总($):<b style={{ color: totalWin < 0 ? '#661313' : '#1ad026' }}>{Number(totalWin).toFixed(2).replace(/\.?0+$/, '')}</b></span>
+          <span className={s.income}>盈($):<b style={{ color: '#1ad026' }}>{Number(totalIncome).toFixed(2).replace(/\.?0+$/, '')}</b></span>
+          <span className={s.expense}>亏($):<b style={{ color: '#661313' }}>{Number(totalLoss).toFixed(2).replace(/\.?0+$/, '')}</b></span>
         </div>
         <div className={s.typeWrap}>
           <div className={s.left} onClick={dirToggle}>
